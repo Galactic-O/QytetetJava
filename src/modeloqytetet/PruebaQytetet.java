@@ -56,7 +56,9 @@ public class PruebaQytetet {
         Qytetet juego = new Qytetet();
 
         juego.inicializarCartasSorpresa();
-
+            
+        System.out.println("Esto es una prueba tope chula. ");
+        
         for(int i=0; i<juego.getMazo().size(); i++){
             System.out.println(juego.getMazo().get(i).toString());
         }
@@ -74,7 +76,7 @@ public class PruebaQytetet {
         }
         
         System.out.println("Pagar cobrar");
-        ArrayList<Sorpresa> mazo_sorpresa = getSorpresa(juego.getMazo(), TipoSorpresa.PAGARCOBRAR);
+        ArrayList<Sorpresa> mazo_sorpresa = getSorpresa(juego.getMazo(), TipoSorpresa.IRACASILLA);
         for(int i=0; i<mazo_sorpresa.size(); i++){
             System.out.println(mazo_sorpresa.get(i).toString());
         }
