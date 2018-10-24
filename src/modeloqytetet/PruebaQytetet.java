@@ -80,7 +80,7 @@ public class PruebaQytetet {
         for(int i=0; i<mazo_sorpresa.size(); i++){
             System.out.println(mazo_sorpresa.get(i).toString());
         }
-       
+        
+        System.out.println(juego.getTablero().toString());
     }
-    
 }

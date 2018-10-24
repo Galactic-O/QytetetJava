@@ -14,10 +14,21 @@ public class Qytetet {
     
     private ArrayList<Sorpresa> mazo = new ArrayList<>();
     private Tablero tablero;
+
+    public Qytetet() {
+        inicializarTablero();
+    }
+    
     
     public ArrayList getMazo(){
         return this.mazo;
     }
+
+    public Tablero getTablero() {
+        return tablero;
+    }
+    
+    
     
     public void inicializarCartasSorpresa(){
         this.mazo.add(new Sorpresa ("Sube el bitcoin. Ganas 100 euros.", 1, TipoSorpresa.PAGARCOBRAR));
