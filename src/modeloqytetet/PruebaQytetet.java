@@ -6,12 +6,14 @@
 package modeloqytetet;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
  * @author pvr999
  */
 public class PruebaQytetet {
+    private static final Scanner in = new Scanner (System.in); 
     
     private static ArrayList getMasQueCero(ArrayList<Sorpresa> mazo){
         
@@ -51,14 +53,32 @@ public class PruebaQytetet {
         return nuevo_mazo;
     }
     
+    private static ArrayList<String> getNombreJugadores(){
+        
+        System.out.println("Numero de jugadores: ");
+        int numJugadores = in.nextInt();
+        in.nextLine();
+        
+        ArrayList<String> nombres = new ArrayList<>();
+        
+        System.out.println("Nombre de los jugadores: ");
+        for(int i=0; i<numJugadores; i++){
+            String s = in.nextLine();
+            nombres.add(s);
+            System.out.println(nombres);
+        }
+        
+        return nombres;
+    }
+    
     public static void main(String[] args) {
+        Qytetet juego = Qytetet.getInstance();
+        juego.inicializarJuego(getNombreJugadores());
         
-        Qytetet juego = new Qytetet();
-
-        juego.inicializarCartasSorpresa();
-            
-        System.out.println("Esto es una prueba tope chula. ");
+        System.out.println("Esto es una prueba.\n");
         
+        
+        /*
         for(int i=0; i<juego.getMazo().size(); i++){
             System.out.println(juego.getMazo().get(i).toString());
         }
@@ -82,5 +102,7 @@ public class PruebaQytetet {
         }
         
         System.out.println(juego.getTablero().toString());
+        */
+        System.out.println(juego.getJugadores().toString());
     }
 }

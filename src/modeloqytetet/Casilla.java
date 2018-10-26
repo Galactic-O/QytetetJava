@@ -16,7 +16,7 @@ public class Casilla {
     private TituloPropiedad titulo;
 
     // Constructor para casillas que no son tipo CALLE
-    public Casilla(int numeroCasilla, TipoCasilla tipo) {
+    Casilla(int numeroCasilla, TipoCasilla tipo) {
         this.numeroCasilla = numeroCasilla;
         this.tipo = tipo;
         this.coste = 0;
@@ -47,13 +47,29 @@ public class Casilla {
         return titulo;
     }
 
-    public void setTitulo(TituloPropiedad titulo) {
+    private void setTitulo(TituloPropiedad titulo) {
         this.titulo = titulo;
     }
-
+    
+    int pagarAlquiler() {
+        throw new UnsupportedOperationException("Sin implementar");
+    }
+    
+    boolean propietarioEncarcelado() {
+        throw new UnsupportedOperationException("Sin implementar");
+    }
+    
+    boolean soyEdificable() {
+        throw new UnsupportedOperationException("Sin implementar");
+    }
+    
+    boolean tengoPropietario() {
+        throw new UnsupportedOperationException("Sin implementar");
+    }
+    
     @Override
     public String toString() {
-        return "Casilla{" + "numeroCasilla=" + numeroCasilla + ", coste=" + coste + ", tipo=" + tipo + ", titulo=" + titulo + '}';
+        return "Casilla:" + "\nNumeroCasilla= " + numeroCasilla + "\nCoste= " + coste + "\nTipo= " + tipo + "\nTitulo= " + titulo;
     }
     
     

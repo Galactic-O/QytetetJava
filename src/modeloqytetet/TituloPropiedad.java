@@ -21,17 +21,11 @@ public class TituloPropiedad {
     private int precioEdificar;
     private int numHoteles;
     private int numCasas;
+    
+    private Jugador propietario = null;
 
-    /**
-     *
-     * @param nombre
-     * @param precioCompra
-     * @param alquilerBase
-     * @param factorRevalorizacion
-     * @param hipotecaBase
-     * @param precioEdificar
-     */
-    public TituloPropiedad(String nombre, int precioCompra, int alquilerBase, float factorRevalorizacion, int hipotecaBase, int precioEdificar) {
+    
+    TituloPropiedad(String nombre, int precioCompra, int alquilerBase, float factorRevalorizacion, int hipotecaBase, int precioEdificar) {
         this.hipotecada = false;
         this.numHoteles = 0;
         this.numCasas = 0;
@@ -84,7 +78,7 @@ public class TituloPropiedad {
 
     @Override
     public String toString() {
-        return "TituloPropiedad{" + "nombre=" + nombre + ", hipotecada=" + hipotecada + ", precioCompra=" + precioCompra + ", alquilerBase=" + alquilerBase + ", factorRevalorizacion=" + factorRevalorizacion + ", hipotecaBase=" + hipotecaBase + ", precioEdificar=" + precioEdificar + ", numHoteles=" + numHoteles + ", numCasas=" + numCasas + '}';
+        return "TituloPropiedad:" + "\n Nombre=" + nombre + "\n hipotecada=" + hipotecada + "\n PrecioCompra=" + precioCompra + "\n AlquilerBase=" + alquilerBase + "\n FactorRevalorizacion=" + factorRevalorizacion + "\n HipotecaBase=" + hipotecaBase + "\n PrecioEdificar=" + precioEdificar + "\n NumHoteles=" + numHoteles + "\n NumCasas=" + numCasas + "\n";
     }
     
     
