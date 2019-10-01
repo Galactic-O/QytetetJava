@@ -38,7 +38,50 @@ public class TituloPropiedad {
         this.precioEdificar = precioEdificar;
     }
 
+    int calcularCosteCancelar(){
+        int coste;
+        
+        coste = (int)(calcularCosteHipotecar() * 1.10);
+        
+        return coste;
+    }
     
+    int calcularCosteHipotecar()
+    {
+        int costeHipoteca = (int)(this.hipotecaBase + (this.numCasas * 0.5 * this.hipotecaBase) + (this.numHoteles * this.hipotecaBase));
+        return costeHipoteca;
+    }
+    
+    int calcularImporteAlquiler()
+    {
+       int costeAlquiler = (int)(this.alquilerBase + (this.numCasas * 0.5 + this.numHoteles * 2));
+       return costeAlquiler;
+    }
+    
+    int calcularPrecioVenta()
+    {
+        return (int)(this.precioCompra + (this.numCasas + this.numHoteles) * precioEdificar * factorRevalorizacion); 
+    }
+    
+    void cancelarHipoteca(){
+        hipotecada = false;
+    }
+    
+    void cobrarAlquiler(int coste)
+    {
+        
+    }
+    
+    void edificarCasa()
+    {
+        this.numCasas = this.numCasas + 1;
+    }
+    
+    void edificarHotel()
+    {
+        this.numHoteles = this.numHoteles + 1;
+        this.numCasas = this.numCasas - 4;
+    }
 
     public String getNombre() {
         return nombre;
@@ -68,13 +111,55 @@ public class TituloPropiedad {
         return precioEdificar;
     }
 
+    public int getNumCasas() {
+        return numCasas;
+    }
+
     public int getNumHoteles() {
         return numHoteles;
     }
 
-    public int getNumCasas() {
-        return numCasas;
+    public void setHipotecada(boolean hipotecada) {
+        this.hipotecada = hipotecada;
     }
+    
+    int hipotecar()
+    {
+        setHipotecada(true);
+        int costeHipoteca = calcularCosteHipotecar();
+        return costeHipoteca;
+    }
+    
+    int pagarAlquiler()
+    {
+        int costeAlquiler = calcularImporteAlquiler();
+        this.propietario.modificarSaldo(costeAlquiler);
+        return costeAlquiler;
+    }
+    
+    boolean propietarioEncarcelado()
+    {
+        if (propietario != null) {
+            if(propietario.getEncarcelado() == true){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    boolean tengoPropietario()
+    {
+        return (propietario!=null);
+    }
+
+    Jugador getPropietario() {
+        return propietario;
+    }
+
+    void setPropietario(Jugador propietario) {
+        this.propietario = propietario;
+    }
+    
 
     @Override
     public String toString() {

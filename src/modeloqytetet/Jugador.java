@@ -10,14 +10,14 @@ import java.util.ArrayList;
  *
  * @author Pablo ~(u_u~)
  */
-public class Jugador {
-    private boolean encarcelado;
-    private String nombre;
-    private int saldo;
+public class Jugador implements Comparable {
+    protected boolean encarcelado;
+    protected String nombre;
+    protected int saldo;
     
-    private Casilla casillaActual;
-    private Sorpresa cartaLibertad;
-    private ArrayList<TituloPropiedad> propiedades;
+    protected Casilla casillaActual;
+    protected Sorpresa cartaLibertad;
+    protected ArrayList<TituloPropiedad> propiedades;
 
     public Jugador(String nombre) {
         this.nombre = nombre;
@@ -29,32 +29,115 @@ public class Jugador {
         this.propiedades = new ArrayList();
     }
     
+    protected Jugador(Jugador otroJugador) {
+        this.nombre = otroJugador.nombre;
+        this.saldo = otroJugador.saldo;
+        this.encarcelado = otroJugador.encarcelado;
+        
+        this.casillaActual = otroJugador.casillaActual;
+        this.cartaLibertad = otroJugador.cartaLibertad;
+        this.propiedades = otroJugador.propiedades;
+    }
+    
+    @Override
+    public int compareTo(Object otroJugador) {
+        int otroCapital = ((Jugador) otroJugador).obtenerCapital();
+        return otroCapital - obtenerCapital();
+    }
+    
     boolean cancelarHipoteca(TituloPropiedad titulo){
-        throw new UnsupportedOperationException("Sin implementar");
+        boolean cancelada = false;
+        
+        int costeCancelar = titulo.calcularCosteCancelar();
+        
+        if (saldo >= costeCancelar){
+            modificarSaldo(-costeCancelar);
+            
+            
+            titulo.cancelarHipoteca();
+                        
+            cancelada = true;
+        }
+        
+        return cancelada;
     }
     
     boolean comprarTituloPropiedad(){
-        throw new UnsupportedOperationException("Sin implementar");
+        boolean comprado = false;
+        int costeCompra = this.casillaActual.getCoste();
+        if (costeCompra < this.saldo)
+        {
+            TituloPropiedad titulo = this.casillaActual.asignarPropietario(this);
+            comprado = true;
+            this.propiedades.add(titulo);
+            modificarSaldo(-costeCompra);
+        }
+        return comprado;
+    }
+    
+    protected Especulador convertirme(int fianza) {
+        Especulador especulador = new Especulador(this, fianza);
+        
+        return especulador;
     }
     
     int cuantasCasasHotelesTengo(){
-        throw new UnsupportedOperationException("Sin implementar");
+        int c=0, h=0;
+        for (TituloPropiedad propiedad : propiedades){
+            c=c+propiedad.getNumCasas();
+            h=h+propiedad.getNumHoteles();
+        }
+        return c+h;
+    }
+    
+    protected boolean deboIrACarcel() {
+        return !(this.tengoCartaLibertad());
     }
     
     boolean deboPagarAlquiler(){
-        throw new UnsupportedOperationException("Sin implementar");
+        TituloPropiedad titulo = this.casillaActual.getTitulo();
+        boolean esDeMiPropiedad = esDeMiPropiedad(titulo);
+        boolean tienePropietario = titulo.tengoPropietario();
+        boolean encarcelado = titulo.propietarioEncarcelado();
+        boolean estaHipotecada = titulo.isHipotecada();
+
+        return (!esDeMiPropiedad && tienePropietario && !encarcelado && !estaHipotecada);
     }
     
     Sorpresa devolverCartaLibertad(){
-        throw new UnsupportedOperationException("Sin implementar");
+        Sorpresa carta = this.cartaLibertad;
+        this.cartaLibertad = null;
+        return carta;
     }
     
     boolean edificarCasa(TituloPropiedad titulo){
-        throw new UnsupportedOperationException("Sin implementar");
+        boolean edificable = puedoEdificarCasa(titulo);
+        if (edificable) 
+        {
+            int costeEdificarCasa = titulo.getPrecioEdificar();
+            boolean tengoSaldo = tengoSaldo(costeEdificarCasa);
+            if (tengoSaldo)
+            {
+                titulo.edificarCasa();
+                modificarSaldo(-costeEdificarCasa);
+            }
+        }
+        return edificable;
     }
     
     boolean edificarHotel(TituloPropiedad titulo){
-        throw new UnsupportedOperationException("Sin implementar");
+        boolean edificable = puedoEdificarHotel(titulo);
+        if (edificable) 
+        {
+            int costeEdificarHotel = titulo.getPrecioEdificar();
+            boolean tengoSaldo = tengoSaldo(costeEdificarHotel);
+            if (tengoSaldo)
+            {
+                titulo.edificarHotel();
+                modificarSaldo(-costeEdificarHotel);
+            }
+        }
+        return edificable;
     }
     
     void eliminarDeMisPropiedades(TituloPropiedad titulo){
@@ -62,7 +145,11 @@ public class Jugador {
     }
     
     boolean esDeMiPropiedad(TituloPropiedad titulo){
-        throw new UnsupportedOperationException("Sin implementar");    
+        boolean encontrado = false;
+        for(TituloPropiedad propiedad : propiedades){
+            if(titulo == propiedad) encontrado = true;
+        }
+        return encontrado;   
     }
     
     boolean estoyEnCalleLibre(){
@@ -77,11 +164,11 @@ public class Jugador {
         return casillaActual;
     }
     
-    boolean getEncarcelado() {
+    public boolean getEncarcelado() {
         return encarcelado;
     }
 
-    String getNombre() {
+    public String getNombre() {
         return nombre;
     }
 
@@ -93,38 +180,81 @@ public class Jugador {
         return saldo;
     }
     
-    boolean hipotecarPropiedad(TituloPropiedad titulo){
-        throw new UnsupportedOperationException("Sin implementar");
+    void hipotecarPropiedad(TituloPropiedad titulo){
+        int costeHipoteca = titulo.hipotecar();
+        modificarSaldo(costeHipoteca);
     }
-    
+
     void irACarcel(Casilla carcel) {
-        throw new UnsupportedOperationException("Sin implementar");
+        setCasillaActual(carcel);
+        setEncarcelado(true);
     }
     
     int modificarSaldo(int cantidad) {
-        throw new UnsupportedOperationException("Sin implementar");
+        this.saldo = this.saldo + cantidad;
+        return this.saldo;
     }
     
     int obtenerCapital() {
-        throw new UnsupportedOperationException("Sin implementar");
+        int capital = 0;
+        capital = capital + this.saldo;
+        for (TituloPropiedad propiedad : propiedades) {
+            capital = capital + propiedad.getPrecioCompra() + 
+                    ( propiedad.getPrecioEdificar() * (propiedad.getNumCasas() + propiedad.getNumHoteles()) );
+            if(propiedad.isHipotecada()) capital = capital - propiedad.getHipotecaBase();
+        }
+        return capital;
     }
     
     ArrayList<TituloPropiedad> obtenerPropiedades(boolean hipotecada) {
-        throw new UnsupportedOperationException("Sin implementar");
+        ArrayList<TituloPropiedad> aux = new ArrayList<>();
+        for(TituloPropiedad propiedad :propiedades){
+            if(propiedad.isHipotecada() == hipotecada){
+                    aux.add(propiedad);
+            }
+        }    
+        return aux;
     }
     
     void pagarAlquiler() {
-        throw new UnsupportedOperationException("Sin implementar");
+        int costeAlquiler = this.casillaActual.pagarAlquiler();
+        modificarSaldo(-costeAlquiler);
     }
     
     void pagarImpuesto() {
-        throw new UnsupportedOperationException("Sin implementar");
+        this.saldo = this.saldo - this.casillaActual.getCoste();
     }
     
     void pagarLibertad(int cantidad) {
-        throw new UnsupportedOperationException("Sin implementar");
+        boolean tengoSaldo = tengoSaldo(cantidad);
+        if (tengoSaldo)
+        {
+            setEncarcelado(false);
+            modificarSaldo(-cantidad);
+        }
     }
-
+    
+    protected boolean puedoEdificarCasa(TituloPropiedad titulo) {
+        boolean edificable = false;
+        int numCasas = titulo.getNumCasas();
+        if (numCasas < 4) 
+        {
+            edificable = true;
+        }
+        return edificable;
+    }
+    
+    protected boolean puedoEdificarHotel(TituloPropiedad titulo) {
+        boolean edificable = false;
+        int numCasas = titulo.getNumCasas();
+        int numHoteles = titulo.getNumHoteles();
+        if (numCasas >= 4 && numHoteles < 4) 
+        {
+            edificable = true;
+        }
+        return edificable;
+    }
+    
     void setEncarcelado(boolean encarcelado) {
         this.encarcelado = encarcelado;
     }
@@ -137,23 +267,23 @@ public class Jugador {
         this.cartaLibertad = cartaLibertad;
     }
     
-    
-    
     boolean tengoCartaLibertad() {
-        throw new UnsupportedOperationException("Sin implementar");
+        return (this.cartaLibertad != null);
     }
     
     private boolean tengoSaldo(int cantidad) {
-        throw new UnsupportedOperationException("Sin implementar");
+        return (this.saldo > cantidad);
     }
     
-    boolean venderPropiedad(Casilla casilla) {
-        throw new UnsupportedOperationException("Sin implementar");
+    void venderPropiedad(Casilla casilla) {
+        TituloPropiedad titulo = casilla.getTitulo();
+        this.propiedades.remove(titulo);
+        titulo.setPropietario(null);
     }
 
     @Override
     public String toString() {
-        return "\n--Jugador--" + "\nNombre: " + nombre + "\nEncarcelado: " + encarcelado + "\nSaldo: " + saldo + "\n";
+        return "\n--Jugador--" + "\nNombre: " + nombre + "\nEncarcelado: " + encarcelado + "\nSaldo: " + saldo + "\nCapital: " + obtenerCapital() + "\n";
     }
     
     

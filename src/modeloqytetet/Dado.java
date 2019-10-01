@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package modeloqytetet;
+import java.util.Random;
 
 /**
  *
@@ -17,7 +18,10 @@ public class Dado {
     private Dado() {}
     
     int tirar() {
-        throw new UnsupportedOperationException("Sin implementar");
+        Random r = new Random();
+        int val = r.nextInt(5)+1;
+        this.valor = val;
+        return val;
     }
 
     public int getValor() {

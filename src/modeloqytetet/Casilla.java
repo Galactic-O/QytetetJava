@@ -9,67 +9,29 @@ package modeloqytetet;
  *
  * @author Pablo ~(u_u~)
  */
-public class Casilla {
-    private int numeroCasilla;
-    private int coste; //En el caso de casillas de tipo CALLE será tomado del precioCompra de su titulo de propiedad
-    private TipoCasilla tipo;
-    private TituloPropiedad titulo;
-
-    // Constructor para casillas que no son tipo CALLE
-    Casilla(int numeroCasilla, TipoCasilla tipo) {
+public abstract class Casilla {
+    protected int numeroCasilla;
+    
+    Casilla(int numeroCasilla) {
         this.numeroCasilla = numeroCasilla;
-        this.tipo = tipo;
-        this.coste = 0;
-        this.titulo = null;
     }
     
-    // Constructor para casillas tipo CALLE
-    public Casilla(int numeroCasilla, TituloPropiedad titulo) {
-        this.numeroCasilla = numeroCasilla;
-        setTitulo(titulo);
-        this.coste = this.titulo.getPrecioCompra();
-        this.tipo = TipoCasilla.CALLE;
-    }
-
     public int getNumeroCasilla() {
         return numeroCasilla;
     }
-
-    public int getCoste() {
-        return coste;
-    }
-
-    public TipoCasilla getTipo() {
-        return tipo;
-    }
-
-    public TituloPropiedad getTitulo() {
-        return titulo;
-    }
-
-    private void setTitulo(TituloPropiedad titulo) {
-        this.titulo = titulo;
-    }
     
-    int pagarAlquiler() {
-        throw new UnsupportedOperationException("Sin implementar");
-    }
+    abstract int getCoste();
+    abstract TipoCasilla getTipo();
+    abstract TituloPropiedad getTitulo();
+    abstract TituloPropiedad asignarPropietario(Jugador jugador);
     
-    boolean propietarioEncarcelado() {
-        throw new UnsupportedOperationException("Sin implementar");
-    }
-    
-    boolean soyEdificable() {
-        throw new UnsupportedOperationException("Sin implementar");
-    }
-    
-    boolean tengoPropietario() {
-        throw new UnsupportedOperationException("Sin implementar");
-    }
+    abstract boolean soyEdificable();
+    abstract boolean tengoPropietario();
+    abstract int pagarAlquiler();
     
     @Override
     public String toString() {
-        return "Casilla:" + "\nNumeroCasilla= " + numeroCasilla + "\nCoste= " + coste + "\nTipo= " + tipo + "\nTitulo= " + titulo;
+        return "Casilla:" + "\nNumeroCasilla= " + numeroCasilla;
     }
     
     
